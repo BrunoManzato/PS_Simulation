@@ -15,6 +15,8 @@
 
 	   !!!ADVISE: THIS SIMULATION WAS DONE WITH GEANT4 V 10.07!!!
 
+//Also, I recommend to use Linux (I did all of this in Ubuntu 18) in order to run the simullation.
+
 
 
 **Hello! This is the Simulation directory of the CAU-USP Collaboration Muon veto system, 

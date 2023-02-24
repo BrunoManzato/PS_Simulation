@@ -1,0 +1,42 @@
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+	MACRO FILES TO RUN THE PLASTIC SCINTILLATOR SIMULATION
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+***In this directory, you'll finde some pre-made Macro files to run our simulation.
+
+***All of then are .mac files, the default archive for GEANT4
+
+***Macro files like that allows us to make changes in the source of particles and some visualizations 
+without recompile the program (what saves a lot of time!)
+
+	1)VIS.MAC
+    This macro file generates the geometry of the detector without any particle in it.
+    It's very good to check that the geometry is right.
+    
+    	2)VISMUONS.MAC
+    This macro creates the geometry and a single muon of 5 GeV, what is faster for visualization.
+    You can use it to check the scintillation effect. I suggest to change the Scintillation Yeld
+    to a small number in the detector construction file (MyDetector.cpp in principle), because a 
+    high number can override the visualizer.
+    
+    	3)RUNMUONS.MAC
+    This macro creates several muons (50, in principle) and do not show the geometry, what allows to
+    run the simulation with correct parameters (like Scintillation Yeld>10000 photons/MeV) in 
+    smaller computers. I runned 50 muons in a 4GB RAM computer, and it works very well, the
+    simulation takes about 3 to 5 minutes in this set.
+    
+    	4)PHOTONS.MAC
+    This macro generates one single optical photon of 2.5 eV and polarization vector (1,1,1) 
+    (in principle, also you can always change those parameters in the macro file). It's very good 
+    to visualize with the optical fiber simulation (OpticalFiber.cpp simulation file).
+    
+    
+    
+    
+    

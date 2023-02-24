@@ -1,0 +1,7 @@
+/detector/FiberNumber {Energy}
+
+/run/reinitializeGeometry true
+
+
+/run/beamOn 1
+

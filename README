@@ -1,0 +1,259 @@
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+
+	//////	   //\\         //  //		   //  //   ///////  ///////
+	//	  //  \\       //  //   //////   //  //   ///      ///  //
+	//	 ////\\\\     //  //	//////   //  //       ///  ///////
+	//////	//      \\   ////// 		 //////  ////////  ///
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+
+	   !!!ADVISE: THIS SIMULATION WAS DONE WITH GEANT4 V 10.07!!!
+
+
+
+**Hello! This is the Simulation directory of the CAU-USP Collaboration Muon veto system, 
+based in plastic scintillators.
+**Please follow the steps in order to run the simulation properly.
+
+
+
+-------------------PRE-STEPS-----------------------------
+
+*****  1)INSTALLING GEANT4  *****
+
+-->In order to run GEANT4, you have to install GEANT4 in your computer.
+-->For this, I recommend to watch this Tutorial from Professor 
+MustafaSchmidt at channel "Physics Matters", because it requires several steps:
+
+	https://www.youtube.com/watch?v=Lxb4WZyKeCE
+
+-->Also is recommended to download all the additional data files that are provided from GEANT4.
+
+
+
+
+*****  2)CREATING SOURCE AND EXPORTING "INCLUDE" FILES  *****
+
+-->For some of the next steps, we'll need to get acess to GEANT4 libraries and "Include files". 
+-->For it, please open the "~/.bashrc" file from your computer (supposing you are running this in LINUX), you can use the following command in the terminal(open with GEDIT program):
+
+#######$  gedit ~/.bashrc
+
+-->Then add the next two lines in the end of the file, with the proper changes:
+	
+	source /path/to/GENT4/DIRECTORY/geant4_versionX_directory/install/bin/geant4.sh
+	export G4INCLUDES=/path/to/GENT4/DIRECTORY/geant4_versionX_directory/install/include/Geant4
+
+
+-->Supposing GEANT4 is installed in the "install" directory.
+
+----->ADVISE!!!: Here the "/path/to/GENT4/DIRECTORY/" is the COMPLETE path to the directory where GEANT4 is installed. And "geant4_versionX_directory" is the NAME of the directory of GEANT4, that can change according to the version of GEANT4 that is used. 
+
+-->In my PERSONAL case, the GEANT4 directory is located at "/home/bmanzato/Downloads/", 
+and the name of the GEANT4's directory is "geant4.10.07.p03", because it's version 10.07, 
+so the lines should be like this:
+
+	source /home/bmanzato/Downloads/geant4.10.07.p03/install/bin/geant4.sh
+	export G4INCLUDES=/home/bmanzato/Downloads/geant4.10.07.p03/install/include/Geant4
+
+-->If you save the ~/.bashrc file, you can check if everything is ok by:
+
+1)Open a new terminal;
+
+2)Using the following command in the terminal:
+
+#############$  echo ${G4INCLUDES}
+
+-->The output should be the "/path/to/GENT4/DIRECTORY/geant4_versionX_directory/install/include/Geant4" address
+
+3)Using the following command in the terminal:
+
+#############$  geant4-config
+
+-->The output should be like:
+
+#############$ Usage: geant4-config [--prefix] [--version] [--libs] [--cflags]
+
+
+
+
+------------------RUNNING THE SIMULATION------------------
+
+-->If all the previus steps are done properly, we can finally run the simulation (Don't worrie, it is much more easy than installing GEANT4).
+
+
+*****  0)CHECKING THE COMPILE .SH FILE  *****
+
+-->This is just a CHECKING step. We'll compile the simulation using the compile.sh file.
+-->The compile.sh file will compile all the executable files listed on it, so, if you 
+add any .cpp or .cc file in the /source directory, please add it's name in the compile.sh file. 
+If not, the new file will not be added to the simulation.
+
+-->If you downloaded this directory, the default compile.sh should be like (with some comments):
+
+////////////////////////////////////////////
+
+
+g++ -o simulation\
+    main.cpp \
+    source/MyDetector.cpp \
+    source/MyPrimaryGenerator.cpp \
+    source/MyActionInitialization.cpp \
+    source/MySensorDetector.cpp \
+    source/MyHit.cpp \
+    source/run.cpp \
+    `geant4-config --libs` -I${G4INCLUDES}
+    
+////////////////////////////////////////////
+
+-->The 2 principal files here are the "main.cpp" file, that makes the simulation happens,
+and the "MyDetector.cpp" file, that constructs the simulation. If you want to change the geometry
+of the detector or any material of it, please change this file in the source directory. You can also
+replace the file by other constructor, just change "MyDetector.cpp" in the "compile.sh" file for
+the name of the new one. 
+-->ADVISE: You can try this by changing "MyDetector.cpp" for "OpticalFiber.cpp" that is in the
+source directory, that will make just the Optical fiber simulation, with no Plastic scintillator
+detector.
+
+
+
+*****  1)COMPILING THE PROGRAM          *****
+
+-->In order to (finally) compile the simulation, just use following commmand in the terminal of LINUX:
+
+#######$  source compile.sh
+
+-->P.S.: You should run it in the root directory of the simulation, that is where this README 
+file should be.
+
+
+-->If all works well, there should be no error messages and the command should give you an executable
+file named "simulation".
+
+
+
+*****  2)RUNNING THE SIMULATION         *****
+
+-->The executable "simulation" file will generate the simulation, you can run it with the command:
+
+#######$  ./tutorial
+
+-->!!!!!!!BUT it will not show you the expected files or visualization. To be consistent (and easier
+to use), all the visualization commands and the set for source particles are given by a macro file. 
+All the default macros that we'll (in principle) need are in the "/macros" directory.
+-->You can see the description of each macro file in the README_MACROS in the /macros directory.
+But here is a quick summary:
+
+
+@@@-----> "vis.mac" : Allows to visualize geometry WITOUT a source particle (what makes easier to plot the result).
+
+-->To run it, use the following command (if you are in this root directory):
+
+#######$  ./simulation macros/vis.mac
+
+-->If you downloaded this surce directory, you shold now see the simulation geometry in OPENGL software.
+
+
+
+@@@-----> "VisMuons.mac" : The same visualization as before, bit now it generates a muon, that will activate the scintillation process. The start muon energy is 5 GeV, but you can chang it in the
+"VisMuons.mac" file (the place to change is commented, but the command is kinda intuitive).
+
+-->To run it, use the following command (if you are in this root directory):
+
+#######$  ./simulation macros/vis.mac
+
+----->ADVISE!!!: If the Scintillation Yeld of the plastic scintillator is too high (>100 photons/MeV),
+it can generate too much photons for OPENGL to plot, so you can change it in the "MyDetector.cpp" file
+BEFORE COMPILING the program (the line where you should change is commented).
+
+
+
+@@@-----> "runMuons.mac" : This macro is simpler because it just runs the simulation WITHOUT
+visualization, wich allows you to run the simulation with several particles even in smaller
+computers. I can easely run 50 muons in a 4GB RAM computer using 1 core of the computer (it just took some time, be patient, take a coffe while it's running).
+-->You can change the number of particles, the particle energy/momentum and even the particle type
+directly in the macro file. The good thing is that, if you change the .mac file, you don't need to
+re-compile the simulation, what  saves some time when we what to just change the energy/position of the particle for tests.
+
+
+-->To run it, use the following command (if you are in this root directory):
+
+#######$  ./simulation macros/runMuons.mac
+
+
+
+@@@-----> "photons.mac" : This is a more specific macro to test the optical fibers and optical 
+properties of the simulation. It generates a photon with visualization. It's more recommended to
+use with the optical fiber geometry simulation ("OpticalFiber.cpp" file as geometry file in compile.sh).
+
+
+-->To run it, use the following command (if you are in this root directory):
+
+#######$  ./simulation macros/photons.mac
+
+
+------->ADVISE: (With the source version of the code) ALL the time you run the simulation with 
+"./simulation", it will generate an output root file named "output0.root" that WILL OVERWRITE THE
+LAST "OUTPUT0.ROOT" FILE! In order to not miss the root file (if you want), please change it's name, or you can change the way the name is given in the "run.cpp" file in the "/source" directory.
+----->ALSO, every time you run the commmand "/run/beamOn" in the macro file or in the OPENGL, it will 
+generate an "outputX.root" file, where "X" corresponds to the number of times you started a new run
+(***-> The run is started with the "/run/beamOn" command)
+
+
+-->In the first version, the output root file has those informations:
+
+@@@@@@ "fx"-> the position where the photon reaches the detector in the x-axis 
+@@@@@@ "fy"-> the position where the photon reaches the detector in the y-axis 
+@@@@@@ "fz"-> the position where the photon reaches the detector in the z-axis 
+@@@@@@ "Detector_Number"->Store the number of the detector that is reached by a photon.
+		          The detector label number is in crescent order in the X-axis.
+		          
+		         
+-->Advise: All reference axis are from the global axis of the simulation!
+
+
+-->Fell free to use the root file as you want with the ROOT software, as like doing any change
+in the code to add more information to the tree.
+
+
+
+**************************************************************************************************
+
+-->This is the basic to run all the simulaton.
+-->Fell free to change the code the way you want. There are some comments is the detector 
+construction code and run.cpp to help in simpler changes.
+-->If you are not from the CAU-USP collaboration, please refere to this as "The CAU-USP muon veto system simulation", with the proper credits.
+
+-->First version writed by Bruno B. Manzato from University of São Paulo.
+
+
+**************************************************************************************************
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+			SPECIAL THANKS TO THE ONLINE TUTORIALS
+		OF PROFESSOR MUSTAFA SCHIDT AND GUSTAVO VALDIVIESSO
+			  THAT HELPED A LOT TO DO THIS CODE
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
